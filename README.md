@@ -190,6 +190,7 @@ act -j local-test -s GITHUB_TOKEN=$GITHUB_TOKEN --container-architecture linux/a
 ```
 
 **Note:** Since this action calls the GitHub Checks API, full local testing requires:
+
 - A real `GITHUB_TOKEN` with repo permissions
 - The repository must exist on GitHub
 - The ref must point to a real commit with check runs
