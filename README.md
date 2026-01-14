@@ -177,6 +177,23 @@ jobs:
 npm install
 ```
 
+### Local Testing with act
+
+You can use [act](https://github.com/nektos/act) to test the action locally:
+
+```bash
+# Dry run (tests that action loads correctly)
+act -j local-test-dry-run --container-architecture linux/amd64
+
+# Full test (requires GitHub token)
+act -j local-test -s GITHUB_TOKEN=$GITHUB_TOKEN --container-architecture linux/amd64
+```
+
+**Note:** Since this action calls the GitHub Checks API, full local testing requires:
+- A real `GITHUB_TOKEN` with repo permissions
+- The repository must exist on GitHub
+- The ref must point to a real commit with check runs
+
 ### Build
 
 ```bash

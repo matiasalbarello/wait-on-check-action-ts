@@ -1,0 +1,65 @@
+# Local test workflow for act
+#
+# IMPORTANT: This action calls the GitHub Checks API, so it has limitations
+# when running locally with act:
+#
+# 1. You need a real GITHUB_TOKEN with repo permissions
+# 2. The repository must exist on GitHub with actual check runs
+# 3. The ref must point to a real commit with checks
+#
+# For local testing, use fail-on-no-checks=false to test the basic flow.
+#
+# Run with:
+#   act -j local-test -s GITHUB_TOKEN=$GITHUB_TOKEN --container-architecture linux/amd64
+#
+# Or for a dry run without API calls:
+#   act -j local-test-dry-run --container-architecture linux/amd64
+
+name: Local Test
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  # Use a known public repo for testing (the original ruby action)
+  TEST_REPO: lewagon/wait-on-check-action
+  TEST_REF: master
+
+jobs:
+  # Dry run - just verifies the action loads and parses inputs
+  local-test-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test action loads correctly (no API call needed)
+        uses: ./
+        with:
+          ref: fake-ref-for-testing
+          repo-token: fake-token
+          check-regexp: this-will-not-match
+          fail-on-no-checks: false
+          verbose: true
+        continue-on-error: true
+
+      - name: Dry run complete
+        run: echo 'Action loaded and executed (may have failed due to fake token, but thats OK for dry run)'
+
+  # Full test - requires real GitHub token
+  local-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test with fail-on-no-checks=false
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          check-regexp: this-pattern-will-not-match-anything
+          fail-on-no-checks: false
+          verbose: true
+
+      - name: Success
+        run: echo 'Action executed successfully!'
