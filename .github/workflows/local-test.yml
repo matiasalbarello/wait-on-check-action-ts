@@ -21,8 +21,7 @@ on:
   push:
 
 env:
-  # Use a known public repo for testing (the original ruby action)
-  TEST_REPO: lewagon/wait-on-check-action
+  TEST_REPO: matiasalbarello/wait-on-check-action-ts
   TEST_REF: master
 
 jobs:
