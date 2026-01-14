@@ -1,3 +1,8 @@
+![Build](https://img.shields.io/github/actions/workflow/status/matiasalbarello/wait-on-check-action-ts/review.yaml)
+![Version](https://img.shields.io/github/v/tag/matiasalbarello/wait-on-check-action-ts)
+![License](https://img.shields.io/github/license/matiasalbarello/wait-on-check-action-ts)
+
+
 # Wait On Check Action
 
 Pause a workflow until a job in another workflow completes successfully.
