@@ -1,0 +1,31 @@
+name: Test verbose=false parameter
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  quick-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Quick job"
+          sleep 3
+
+  # This job tests verbose: false (quiet mode)
+  test-verbose-false:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait with verbose disabled
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-verbose-false
+          check-name: quick-job
+          verbose: false
+
+      - name: Success
+        run: echo 'Successfully waited with verbose=false!'

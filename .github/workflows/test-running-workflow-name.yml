@@ -1,0 +1,30 @@
+name: Test running-workflow-name exclusion
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  other-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Other job"
+          sleep 5
+
+  # This job tests that running-workflow-name properly excludes itself
+  test-running-workflow-name:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for other-job (excluding self via running-workflow-name)
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-running-workflow-name
+          check-name: other-job
+
+      - name: Success
+        run: echo 'Successfully excluded self from checks!'

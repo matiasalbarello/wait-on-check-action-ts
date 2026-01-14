@@ -1,0 +1,24 @@
+name: Test fail-on-no-checks=false
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # This job tests that fail-on-no-checks=false succeeds when no checks match
+  test-fail-on-no-checks-false:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait with non-matching pattern (should succeed with fail-on-no-checks=false)
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-fail-on-no-checks-false
+          check-regexp: this-pattern-matches-nothing-at-all-xyz123
+          fail-on-no-checks: false
+
+      - name: Success
+        run: echo 'Successfully handled no matching checks with fail-on-no-checks=false!'

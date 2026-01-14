@@ -1,0 +1,40 @@
+name: Test multiple allowed-conclusions
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # A job that succeeds
+  successful-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job succeeds"
+
+  # A job that is skipped
+  skipped-job:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - run: echo "This job is skipped"
+
+  # A job that is cancelled (via timeout)
+  # Note: This is tricky to test, so we just test success + skipped
+
+  # This job tests allowing multiple conclusions
+  test-multiple-conclusions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait allowing success and skipped conclusions
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-multiple-conclusions
+          check-regexp: ^(successful-job|skipped-job)$
+          allowed-conclusions: success,skipped
+
+      - name: Success
+        run: echo 'Successfully handled multiple allowed conclusions!'

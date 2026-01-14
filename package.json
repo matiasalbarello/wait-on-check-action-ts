@@ -1,0 +1,42 @@
+{
+  "name": "wait-on-check-action",
+  "version": "1.0.0",
+  "description": "GitHub Action to wait on a certain check to pass for commit",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && ncc build lib/index.js -o dist",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "all": "npm run format && npm run lint && npm run test && npm run build"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "checks",
+    "wait"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^2.0.2",
+    "@actions/github": "^7.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.8",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "@vercel/ncc": "^0.38.4",
+    "eslint": "^9.39.2",
+    "jest": "^30.2.0",
+    "prettier": "^3.7.4",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.0"
+  }
+}

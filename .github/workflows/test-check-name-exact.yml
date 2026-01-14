@@ -1,0 +1,38 @@
+name: Test check-name exact match
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # Jobs with similar names to test exact matching
+  my-test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "my-test job"
+          sleep 5
+
+  my-test-extended:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "my-test-extended job (should not match 'my-test')"
+          sleep 15
+
+  # This job tests that check-name does exact matching
+  test-check-name-exact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for exact check name (should only match my-test, not my-test-extended)
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-check-name-exact
+          check-name: my-test
+
+      - name: Success
+        run: echo 'Successfully matched exact check name!'

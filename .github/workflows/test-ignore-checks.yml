@@ -1,0 +1,45 @@
+name: Test ignore-checks parameter
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # These are target jobs to wait for
+  target-job-1:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Target job 1 running"
+          sleep 5
+
+  target-job-2:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Target job 2 running"
+          sleep 5
+
+  ignored-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "This job should be ignored"
+          sleep 15
+
+  # This job tests the ignore-checks parameter
+  test-ignore-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for target jobs (ignoring ignored-job)
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-ignore-checks
+          ignore-checks: ignored-job
+
+      - name: Success
+        run: echo 'Successfully waited while ignoring specified check!'

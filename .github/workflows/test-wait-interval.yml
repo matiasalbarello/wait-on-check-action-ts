@@ -1,0 +1,30 @@
+name: Test wait-interval parameter
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  medium-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Medium duration job"
+          sleep 8
+
+  # This job tests a custom wait-interval
+  test-wait-interval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait with custom interval (3 seconds)
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 3
+          running-workflow-name: test-wait-interval
+          check-name: medium-job
+
+      - name: Success
+        run: echo 'Successfully waited with custom wait-interval!'

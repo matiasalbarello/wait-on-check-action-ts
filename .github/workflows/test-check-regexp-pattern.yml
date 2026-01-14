@@ -1,0 +1,45 @@
+name: Test check-regexp patterns
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # Jobs with pattern-based names
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "build-linux"
+          sleep 5
+
+  build-macos:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "build-macos"
+          sleep 5
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "deploy-prod (should not match build-* pattern)"
+          sleep 15
+
+  # This job tests regexp pattern matching
+  test-check-regexp-pattern:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for all build-* jobs using regexp
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+          running-workflow-name: test-check-regexp-pattern
+          check-regexp: ^build-
+
+      - name: Success
+        run: echo 'Successfully matched regexp pattern!'
