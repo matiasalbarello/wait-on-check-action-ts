@@ -26,14 +26,14 @@ async function queryCheckRuns(
   repo: string,
   ref: string
 ): Promise<CheckRun[]> {
-  const response = await octokit.rest.checks.listForRef({
+  const runs = await octokit.paginate(octokit.rest.checks.listForRef, {
     owner,
     repo,
     ref,
     per_page: 100
   })
 
-  return response.data.check_runs.map((run) => ({
+  return runs.map((run) => ({
     name: run.name,
     status: run.status as CheckRun['status'],
     conclusion: run.conclusion as CheckRun['conclusion']
@@ -100,6 +100,23 @@ export async function waitForChecks(
 
   // Initial query
   let checks = await queryAndFilter()
+
+  // If filters are set but no checks found yet, wait for them to be discovered
+  if (
+    filtersPresent(inputs.checkName, inputs.checkRegexp) &&
+    checks.length === 0 &&
+    inputs.failOnNoChecks
+  ) {
+    const waitUntil = Date.now() + inputs.checksDiscoveryTimeout * 1000
+    while (checks.length === 0 && Date.now() < waitUntil) {
+      logger.logDiscoveryWaiting(
+        inputs.waitInterval,
+        inputs.checksDiscoveryTimeout
+      )
+      await sleep(inputs.waitInterval)
+      checks = await queryAndFilter()
+    }
+  }
 
   // Check if no checks match the filter
   if (

@@ -29,6 +29,7 @@ export function parseInputs(): ActionInputs {
   const apiEndpoint = core.getInput('api-endpoint')
   const verboseRaw = core.getInput('verbose')
   const failOnNoChecksRaw = core.getInput('fail-on-no-checks')
+  const checksDiscoveryTimeoutRaw = core.getInput('checks-discovery-timeout')
 
   // Parse comma-separated values
   const ignoreChecks = parseCommaSeparated(ignoreChecksRaw)
@@ -40,6 +41,7 @@ export function parseInputs(): ActionInputs {
 
   // Parse numeric values
   const waitInterval = parseInt(waitIntervalRaw, 10) || 10
+  const checksDiscoveryTimeout = parseInt(checksDiscoveryTimeoutRaw, 10) || 60
 
   // Parse boolean values (default verbose to true, failOnNoChecks to true)
   const verbose = verboseRaw === '' ? true : verboseRaw.toLowerCase() === 'true'
@@ -57,6 +59,7 @@ export function parseInputs(): ActionInputs {
     waitInterval,
     apiEndpoint,
     verbose,
-    failOnNoChecks
+    failOnNoChecks,
+    checksDiscoveryTimeout
   }
 }

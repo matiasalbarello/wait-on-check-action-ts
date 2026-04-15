@@ -63,6 +63,15 @@ export class Logger {
   }
 
   /**
+   * Log that we're waiting for checks to be discovered (always shown, not behind verbose)
+   */
+  logDiscoveryWaiting(waitInterval: number, discoveryTimeout: number): void {
+    core.info(
+      `Matching checks have not been found yet, will check again in ${waitInterval} seconds. (Limit: ${discoveryTimeout}s)`
+    )
+  }
+
+  /**
    * Log success message when no checks match but fail-on-no-checks is false
    */
   logNoChecksSuccess(): void {

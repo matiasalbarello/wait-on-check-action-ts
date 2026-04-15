@@ -24,6 +24,8 @@ export interface ActionInputs {
   verbose: boolean
   /** Fail if no checks match the filter */
   failOnNoChecks: boolean
+  /** Seconds to wait for checks to be discovered before failing */
+  checksDiscoveryTimeout: number
 }
 
 /**

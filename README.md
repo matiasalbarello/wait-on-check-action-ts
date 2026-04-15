@@ -4,6 +4,11 @@
 
 # Wait On Check Action
 
+> Inspired by [lewagon/wait-on-check-action](https://github.com/lewagon/wait-on-check-action), rewritten in TypeScript.
+>
+> **Why a TypeScript rewrite?**
+> The original action is a Ruby composite action that installs Ruby and bundles gems on every run, adding overhead (~30s+) to each workflow. This version runs as a native Node.js action (`node20`) with no setup step, making it faster and leaner. The API surface and parameters are kept intentionally compatible with the original.
+
 Pause a workflow until a job in another workflow completes successfully.
 
 This action uses the [Checks API](https://docs.github.com/en/rest/checks) to poll for check results. On success, the action exits allowing the workflow to resume. Otherwise, the action will exit with status code 1 and fail the whole workflow.
@@ -67,7 +72,8 @@ jobs:
 | `wait-interval`         | `10`              | Seconds to wait between API polling requests                        |
 | `api-endpoint`          | `""`              | Custom GitHub API endpoint (for GHE)                                |
 | `verbose`               | `true`            | Enable detailed logging                                             |
-| `fail-on-no-checks`     | `true`            | Fail if no checks match the filter                                  |
+| `fail-on-no-checks`            | `true`            | Fail if no checks match the filter                                                                                   |
+| `checks-discovery-timeout`     | `60`              | Seconds to wait for matching checks to appear before failing (handles the case where the target workflow hasn't registered yet) |
 
 ## Usage Examples
 

@@ -200,6 +200,7 @@ function parseInputs() {
     const apiEndpoint = core.getInput('api-endpoint');
     const verboseRaw = core.getInput('verbose');
     const failOnNoChecksRaw = core.getInput('fail-on-no-checks');
+    const checksDiscoveryTimeoutRaw = core.getInput('checks-discovery-timeout');
     // Parse comma-separated values
     const ignoreChecks = parseCommaSeparated(ignoreChecksRaw);
     const allowedConclusions = parseCommaSeparated(allowedConclusionsRaw);
@@ -207,6 +208,7 @@ function parseInputs() {
     const finalAllowedConclusions = allowedConclusions.length > 0 ? allowedConclusions : ['success', 'skipped'];
     // Parse numeric values
     const waitInterval = parseInt(waitIntervalRaw, 10) || 10;
+    const checksDiscoveryTimeout = parseInt(checksDiscoveryTimeoutRaw, 10) || 60;
     // Parse boolean values (default verbose to true, failOnNoChecks to true)
     const verbose = verboseRaw === '' ? true : verboseRaw.toLowerCase() === 'true';
     const failOnNoChecks = failOnNoChecksRaw === '' ? true : failOnNoChecksRaw.toLowerCase() === 'true';
@@ -221,7 +223,8 @@ function parseInputs() {
         waitInterval,
         apiEndpoint,
         verbose,
-        failOnNoChecks
+        failOnNoChecks,
+        checksDiscoveryTimeout
     };
 }
 
@@ -322,6 +325,12 @@ class Logger {
         }
     }
     /**
+     * Log that we're waiting for checks to be discovered (always shown, not behind verbose)
+     */
+    logDiscoveryWaiting(waitInterval, discoveryTimeout) {
+        core.info(`Matching checks have not been found yet, will check again in ${waitInterval} seconds. (Limit: ${discoveryTimeout}s)`);
+    }
+    /**
      * Log success message when no checks match but fail-on-no-checks is false
      */
     logNoChecksSuccess() {
@@ -385,13 +394,13 @@ function sleep(seconds) {
  * Query check runs for a ref from GitHub API
  */
 async function queryCheckRuns(octokit, owner, repo, ref) {
-    const response = await octokit.rest.checks.listForRef({
+    const runs = await octokit.paginate(octokit.rest.checks.listForRef, {
         owner,
         repo,
         ref,
         per_page: 100
     });
-    return response.data.check_runs.map((run) => ({
+    return runs.map((run) => ({
         name: run.name,
         status: run.status,
         conclusion: run.conclusion
@@ -432,6 +441,17 @@ async function waitForChecks(octokit, inputs) {
     };
     // Initial query
     let checks = await queryAndFilter();
+    // If filters are set but no checks found yet, wait for them to be discovered
+    if ((0, filters_1.filtersPresent)(inputs.checkName, inputs.checkRegexp) &&
+        checks.length === 0 &&
+        inputs.failOnNoChecks) {
+        const waitUntil = Date.now() + inputs.checksDiscoveryTimeout * 1000;
+        while (checks.length === 0 && Date.now() < waitUntil) {
+            logger.logDiscoveryWaiting(inputs.waitInterval, inputs.checksDiscoveryTimeout);
+            await sleep(inputs.waitInterval);
+            checks = await queryAndFilter();
+        }
+    }
     // Check if no checks match the filter
     if ((0, filters_1.filtersPresent)(inputs.checkName, inputs.checkRegexp) &&
         checks.length === 0) {

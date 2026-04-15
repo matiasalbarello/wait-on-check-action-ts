@@ -143,6 +143,23 @@ describe('parseInputs', () => {
     expect(result.ignoreChecks).toEqual([])
   })
 
+  it('parses checks-discovery-timeout as number', () => {
+    setupMocks({
+      ref: 'main',
+      'checks-discovery-timeout': '120'
+    })
+
+    const result = parseInputs()
+    expect(result.checksDiscoveryTimeout).toBe(120)
+  })
+
+  it('uses default checks-discovery-timeout when empty', () => {
+    setupMocks({ ref: 'main' })
+
+    const result = parseInputs()
+    expect(result.checksDiscoveryTimeout).toBe(60)
+  })
+
   it('parses all inputs correctly', () => {
     setupMocks({
       ref: 'abc123',
@@ -155,7 +172,8 @@ describe('parseInputs', () => {
       'wait-interval': '15',
       'api-endpoint': 'https://ghe.example.com/api/v3',
       verbose: 'false',
-      'fail-on-no-checks': 'false'
+      'fail-on-no-checks': 'false',
+      'checks-discovery-timeout': '30'
     })
 
     const result = parseInputs()
@@ -171,7 +189,8 @@ describe('parseInputs', () => {
       waitInterval: 15,
       apiEndpoint: 'https://ghe.example.com/api/v3',
       verbose: false,
-      failOnNoChecks: false
+      failOnNoChecks: false,
+      checksDiscoveryTimeout: 30
     })
   })
 })

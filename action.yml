@@ -1,5 +1,6 @@
 name: 'Wait on check'
-description: 'Wait on a certain check to pass for commit'
+author: 'matiasalbarello'
+description: 'Pause a workflow until a job in another workflow completes. Zero-overhead TypeScript implementation — no Ruby or Docker setup required.'
 inputs:
   allowed-conclusions:
     description: 'Array of allowed conclusions'
@@ -44,6 +45,10 @@ inputs:
     description: 'Fail the action if no checks match the filter (check-name or check-regexp). Set to false to succeed when no checks match.'
     required: false
     default: 'true'
+  checks-discovery-timeout:
+    description: 'Seconds to wait for matching checks to be discovered before failing. Useful when the target workflow has not yet registered its checks.'
+    required: false
+    default: '60'
 
 runs:
   using: 'node20'
