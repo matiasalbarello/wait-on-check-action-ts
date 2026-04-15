@@ -1,5 +1,5 @@
 {
-  "name": "wait-on-check-action",
+  "name": "wait-on-check-action-ts",
   "version": "1.0.0",
   "description": "GitHub Action to wait on a certain check to pass for commit",
   "main": "dist/index.js",
