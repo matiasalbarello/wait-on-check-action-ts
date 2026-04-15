@@ -5,7 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - Unreleased
+## [1.1.0] - 2026-04-15
+
+### Added
+
+- `checks-discovery-timeout` parameter (default: 60s) — waits for matching checks
+  to register before failing. Prevents false `CheckNeverRunError` when workflows
+  start simultaneously and the target hasn't registered its checks yet.
+
+### Fixed
+
+- API pagination: switched from `per_page: 100` (hard cap) to `octokit.paginate`
+  so repositories with more than 100 check runs on a ref are handled correctly.
+
+### Changed
+
+- Improved `action.yml` description and added `author` field for Marketplace discoverability.
+- README now credits [lewagon/wait-on-check-action](https://github.com/lewagon/wait-on-check-action)
+  as the inspiration for this TypeScript rewrite.
+
+## [1.0.0] - 2026-01-14
 
 ### Added
 

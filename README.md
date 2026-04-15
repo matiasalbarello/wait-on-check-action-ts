@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for tests to succeed
-        uses: matiasalbarello/wait-on-check-action@v1.0.0
+        uses: matiasalbarello/wait-on-check-action@v1.1.0
         with:
           ref: ${{ github.ref }}
           check-name: 'Run tests'
@@ -81,7 +81,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'
@@ -92,7 +92,7 @@ jobs:
 
 ```yml
 - name: Wait for all test checks
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     check-regexp: '^test-.*'
@@ -104,7 +104,7 @@ jobs:
 
 ```yml
 - name: Wait for all checks
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -115,7 +115,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'
@@ -127,7 +127,7 @@ jobs:
 
 ```yml
 - name: Wait for optional tests
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     check-regexp: 'optional-.*'
@@ -139,7 +139,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action@v1.0.0
+  uses: matiasalbarello/wait-on-check-action@v1.1.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'
