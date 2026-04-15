@@ -61,19 +61,19 @@ jobs:
 
 ### Optional
 
-| Parameter               | Default           | Description                                                         |
-| ----------------------- | ----------------- | ------------------------------------------------------------------- |
-| `repo-token`            | `""`              | A GitHub token for the repo (usually `${{ secrets.GITHUB_TOKEN }}`) |
-| `check-name`            | `""`              | A specific check name to wait for                                   |
-| `check-regexp`          | `""`              | Filter checks to wait using Regexp                                  |
-| `running-workflow-name` | `""`              | Name of the current workflow to exclude from checks                 |
-| `ignore-checks`         | `""`              | Comma-separated list of check names to ignore                       |
-| `allowed-conclusions`   | `success,skipped` | Comma-separated list of allowed conclusions                         |
-| `wait-interval`         | `10`              | Seconds to wait between API polling requests                        |
-| `api-endpoint`          | `""`              | Custom GitHub API endpoint (for GHE)                                |
-| `verbose`               | `true`            | Enable detailed logging                                             |
-| `fail-on-no-checks`            | `true`            | Fail if no checks match the filter                                                                                   |
-| `checks-discovery-timeout`     | `60`              | Seconds to wait for matching checks to appear before failing (handles the case where the target workflow hasn't registered yet) |
+| Parameter                  | Default           | Description                                                                                                                     |
+| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `repo-token`               | `""`              | A GitHub token for the repo (usually `${{ secrets.GITHUB_TOKEN }}`)                                                             |
+| `check-name`               | `""`              | A specific check name to wait for                                                                                               |
+| `check-regexp`             | `""`              | Filter checks to wait using Regexp                                                                                              |
+| `running-workflow-name`    | `""`              | Name of the current workflow to exclude from checks                                                                             |
+| `ignore-checks`            | `""`              | Comma-separated list of check names to ignore                                                                                   |
+| `allowed-conclusions`      | `success,skipped` | Comma-separated list of allowed conclusions                                                                                     |
+| `wait-interval`            | `10`              | Seconds to wait between API polling requests                                                                                    |
+| `api-endpoint`             | `""`              | Custom GitHub API endpoint (for GHE)                                                                                            |
+| `verbose`                  | `true`            | Enable detailed logging                                                                                                         |
+| `fail-on-no-checks`        | `true`            | Fail if no checks match the filter                                                                                              |
+| `checks-discovery-timeout` | `60`              | Seconds to wait for matching checks to appear before failing (handles the case where the target workflow hasn't registered yet) |
 
 ## Usage Examples
 
