@@ -7,7 +7,7 @@
 > Inspired by [lewagon/wait-on-check-action](https://github.com/lewagon/wait-on-check-action), rewritten in TypeScript.
 >
 > **Why a TypeScript rewrite?**
-> The original action is a Ruby composite action that installs Ruby and bundles gems on every run, adding overhead (~30s+) to each workflow. This version runs as a native Node.js action (`node20`) with no setup step, making it faster and leaner. The API surface and parameters are kept intentionally compatible with the original.
+> The original action is a Ruby composite action that installs Ruby and bundles gems on every run, adding overhead (~30s+) to each workflow. This version runs as a native Node.js action (`node24`) with no setup step, making it faster and leaner. The API surface and parameters are kept intentionally compatible with the original.
 
 Pause a workflow until a job in another workflow completes successfully.
 
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for tests to succeed
-        uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+        uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
         with:
           ref: ${{ github.ref }}
           check-name: 'Run tests'
@@ -81,7 +81,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'
@@ -92,7 +92,7 @@ jobs:
 
 ```yml
 - name: Wait for all test checks
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     check-regexp: '^test-.*'
@@ -104,7 +104,7 @@ jobs:
 
 ```yml
 - name: Wait for all checks
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -115,7 +115,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'
@@ -127,7 +127,7 @@ jobs:
 
 ```yml
 - name: Wait for optional tests
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     check-regexp: 'optional-.*'
@@ -139,7 +139,7 @@ jobs:
 
 ```yml
 - name: Wait for tests
-  uses: matiasalbarello/wait-on-check-action-ts@v1.1.0
+  uses: matiasalbarello/wait-on-check-action-ts@v1.2.0
   with:
     ref: ${{ github.sha }}
     check-name: 'Run tests'

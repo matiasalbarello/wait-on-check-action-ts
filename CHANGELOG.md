@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-07-02
+
+### Changed
+
+- Action runtime bumped from `node20` to `node24`. GitHub Actions now emits
+  deprecation warnings for Node 20 actions and will force Node 24 by default
+  starting June 2nd, 2026. CI workflows updated to Node 24 accordingly.
+
 ## [1.1.0] - 2026-04-15
 
 ### Added
